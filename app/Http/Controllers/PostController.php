@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -14,7 +15,15 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate(10);
+        $posts = Post::latest()
+            ->withCount('likers')
+            ->withCount('comments')
+            ->when(Auth::check(), function ($query) {
+                $query->withExists(['likers as is_liked' => function ($query) {
+                    $query->where('user_id', Auth::id());
+                }]);
+            })
+            ->paginate(10);
         return view('posts.index', compact('posts'));
     }
 
@@ -55,6 +64,13 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post->loadCount('likers');
+        if (Auth::check()) {
+            $post->is_liked = $post->likers()->where('user_id', Auth::id())->exists();
+        } else {
+            $post->is_liked = false;
+        }
+        $post->load('comments.user');
         return view('posts.show', compact('post'));
     }
 

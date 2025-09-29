@@ -16,7 +16,7 @@
                             <span class="font-semibold">{{ Auth::user()->name }}</span>
                             <i class="fas fa-chevron-down"></i>
                         </button>
-                        <div id="user-menu" class="absolute right-0 hidden w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg">
+                        <div id="user-menu" class="absolute left-0 top-full z-50 hidden w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg">
                             <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Mon Profil</a>
                             <form action="/logout" method="POST" class="w-full">
                                 @csrf
