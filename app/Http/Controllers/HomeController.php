@@ -15,6 +15,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $sliderPosts = Post::latest()
+            ->published()
+            ->take(5)
+            ->get();
+
         $posts = Post::latest()->take(6)
             ->withCount('likers')
             ->withCount('comments')
@@ -24,6 +29,10 @@ class HomeController extends Controller
                 }]);
             })
             ->get(); // Get the 6 latest posts
-        return view('home', ['posts' => $posts]);
+
+        return view('home', [
+            'posts' => $posts,
+            'sliderPosts' => $sliderPosts,
+        ]);
     }
 }
