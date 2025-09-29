@@ -15,18 +15,42 @@
 @section('content')
     <!-- Main Content -->
     <main class="container py-8 mx-auto">
-        <!-- Featured Article -->
-        <section class="mb-12">
-            <div class="relative w-full h-[400px] rounded-lg overflow-hidden">
-                <img src="/img/img1.jpeg" alt="Featured Article" class="object-cover w-full h-full">
-                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
-                <div class="absolute bottom-0 p-8 text-white">
-                    <h2 class="text-4xl font-bold">Les dernières avancées technologiques de 2025</h2>
-                    <p class="mt-2 text-lg">Un aperçu des innovations qui façonnent notre avenir.</p>
-                    <a href="#" class="inline-block px-6 py-2 mt-4 font-semibold text-white bg-blue-600 rounded-md">Lire
-                        la suite</a>
-                </div>
+        <!-- Slider Section -->
+        <section class="mb-12 relative">
+            <div class="slider-container relative w-full h-[400px] rounded-lg overflow-hidden">
+                @if($sliderPosts->count())
+                    @foreach($sliderPosts as $index => $post)
+                        <div class="slider-item absolute inset-0 transition-opacity duration-500 ease-in-out {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}">
+                            <img src="{{ Storage::url($post->featured_image) ?? '/img/img1.jpeg' }}" alt="{{ $post->title }}" class="object-cover w-full h-full">
+                            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                            <div class="absolute bottom-0 p-8 text-white">
+                                <h2 class="text-4xl font-bold">{{ $post->title }}</h2>
+                                <p class="mt-2 text-lg">{{ $post->excerpt }}</p>
+                                <a href="{{ route('posts.show', $post) }}" class="inline-block px-6 py-2 mt-4 font-semibold text-white bg-blue-600 rounded-md">Lire la suite</a>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="slider-item absolute inset-0 transition-opacity duration-500 ease-in-out opacity-100">
+                        <img src="/img/img1.jpeg" alt="Featured Article" class="object-cover w-full h-full">
+                        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                        <div class="absolute bottom-0 p-8 text-white">
+                            <h2 class="text-4xl font-bold">Aucun article en vedette</h2>
+                            <p class="mt-2 text-lg">Revenez plus tard pour découvrir nos derniers articles.</p>
+                        </div>
+                    </div>
+                @endif
             </div>
+
+            <!-- Slider Navigation -->
+            @if($sliderPosts->count() > 1)
+            <button class="slider-prev absolute top-1/2 left-4 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full z-20">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-next absolute top-1/2 right-4 -translate-y-1/2 bg-black bg-opacity-50 text-white p-3 rounded-full z-20">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            @endif
         </section>
 
         <!-- Articles Grid -->
@@ -48,6 +72,7 @@
                                 </div>
 
                                 <div class="flex items-center justify-between mt-4 flex-wrap">
+                                    <button class="flex items-center space-x-1 text-gray-500 hover:text-red-500 like-button"
                                             data-post-id="{{ $post->id }}"
                                             data-liked="{{ $post->is_liked ? 'true' : 'false' }}">
                                         <i class="{{ $post->is_liked ? 'fas' : 'far' }} fa-heart"></i>

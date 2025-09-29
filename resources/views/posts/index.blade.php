@@ -18,6 +18,9 @@
     <div class="space-y-8">
         @foreach($posts as $post)
             <article class="p-6 bg-white rounded-lg shadow">
+                @if ($post->featured_image)
+                    <img src="{{ Storage::url($post->featured_image) }}" alt="{{ $post->title }}" class="object-cover w-full h-48 mb-4 rounded-md">
+                @endif
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="mb-2 text-2xl font-bold">
@@ -60,25 +63,26 @@
                         <span>{{ $post->comments_count }}</span>
                     </a>
 
-                                            <div class="relative">
-                                                <button class="text-gray-500 hover:text-green-500 share-button">
-                                                    <i class="fas fa-share-alt"></i>
-                                                </button>
-                                                <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden share-dropdown">
-                                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('posts.show', $post)) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                        <i class="fab fa-facebook-f mr-2"></i> Facebook
-                                                    </a>
-                                                    <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('posts.show', $post)) }}&text={{ urlencode($post->title) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                        <i class="fab fa-twitter mr-2"></i> Twitter
-                                                    </a>
-                                                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(route('posts.show', $post)) }}&title={{ urlencode($post->title) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                        <i class="fab fa-linkedin-in mr-2"></i> LinkedIn
-                                                    </a>
-                                                    <a href="https://wa.me/?text={{ urlencode($post->title . ' ' . route('posts.show', $post)) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                                        <i class="fab fa-whatsapp mr-2"></i> WhatsApp
-                                                    </a>
-                                                </div>
-                                            </div>                </div>
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-green-500 share-button">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 hidden share-dropdown">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('posts.show', $post)) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fab fa-facebook-f mr-2"></i> Facebook
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url={{ urlencode(route('posts.show', $post)) }}&text={{ urlencode($post->title) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fab fa-twitter mr-2"></i> Twitter
+                            </a>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ urlencode(route('posts.show', $post)) }}&title={{ urlencode($post->title) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fab fa-linkedin-in mr-2"></i> LinkedIn
+                            </a>
+                            <a href="https://wa.me/?text={{ urlencode($post->title . ' ' . route('posts.show', $post)) }}" target="_blank" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </article>
         @endforeach
     </div>

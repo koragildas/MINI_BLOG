@@ -49,4 +49,52 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Slider logic
+    const sliderItems = document.querySelectorAll('.slider-item');
+    const sliderPrevButton = document.querySelector('.slider-prev');
+    const sliderNextButton = document.querySelector('.slider-next');
+    let currentSlide = 0;
+    let slideInterval;
+
+    function showSlide(index) {
+        sliderItems.forEach((item, i) => {
+            if (i === index) {
+                item.classList.remove('opacity-0');
+                item.classList.add('opacity-100');
+            } else {
+                item.classList.remove('opacity-100');
+                item.classList.add('opacity-0');
+            }
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % sliderItems.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + sliderItems.length) % sliderItems.length;
+        showSlide(currentSlide);
+    }
+
+    if (sliderItems.length > 0) {
+        showSlide(currentSlide); // Show the first slide initially
+
+        if (sliderPrevButton && sliderNextButton) {
+            sliderPrevButton.addEventListener('click', prevSlide);
+            sliderNextButton.addEventListener('click', nextSlide);
+        }
+
+        // Auto-play slider
+        slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+
+        // Pause auto-play on hover
+        const sliderContainer = document.querySelector('.slider-container');
+        if (sliderContainer) {
+            sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
+            sliderContainer.addEventListener('mouseleave', () => slideInterval = setInterval(nextSlide, 5000));
+        }
+    }
 });
